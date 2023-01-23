@@ -1,16 +1,7 @@
 spring:
-  profiles:
-    active: local
-
----
-spring:
-  config:
-    activate:
-      on-profile: local
   batch:
     job:
       names: ${job.name:NONE}
-      enabled: false
     jdbc:
       initialize-schema: ALWAYS
   datasource:
@@ -19,14 +10,4 @@ spring:
     username: root
     password:
   jpa:
-    database: mysql
-    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     show-sql: true
-
----
-spring:
-  config:
-    activate:
-      on-profile: test
-  jpa:
-    database: h2

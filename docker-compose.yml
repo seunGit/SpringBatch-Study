@@ -5,8 +5,8 @@ services:
     container_name: spring_batch
     image: mysql:5.7
     environment:
-      MYSQL_DATABASE: "spring_batch"
-      MYSQL_ROOT_PASSWORD: "password1234"
+      MYSQL_DATABASE: "mysql-container"
+      MYSQL_ROOT_PASSWORD: "mysql1234"
       TZ: "Asia/Seoul"
     ports:
       - "3306:3306"
