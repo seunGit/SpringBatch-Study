@@ -31,12 +31,8 @@ import java.util.Arrays;
 @Configuration
 @RequiredArgsConstructor
 public class ValidatedParamJobConfig {
-
-    @Autowired
-    private JobBuilderFactory jobBuilderFactory;
-
-    @Autowired
-    private StepBuilderFactory stepBuilderFactory;
+    private final JobBuilderFactory jobBuilderFactory;
+    private final StepBuilderFactory stepBuilderFactory;
 
     @Bean
     public Job validatedParamJob(Step validatedParamStep) {
