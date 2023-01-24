@@ -16,7 +16,6 @@ import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +23,7 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Arrays;
 
 /**
- * desc: tasklet을 활용하여 Hello World를 출력
+ * desc: 파일 이름 파라미터 전달, 검증
  * run: --job.names =helloWorldJob
  */
 
@@ -44,7 +43,7 @@ public class ValidatedParamJobConfig {
                 .build();
     }
 
-    private CompositeJobParametersValidator multipleValidator() {
+    private CompositeJobParametersValidator multipleValidator() { // CompositeJobParametersValidator를 활용하여 다수의 validator을 등록할 수 있다.
         CompositeJobParametersValidator validator = new CompositeJobParametersValidator();
         validator.setValidators(Arrays.asList(new FileParamValidator()));
 

@@ -1,13 +1,13 @@
 spring:
   batch:
     job:
-      names: ${job.name:NONE}
+      names: ${job.name:NONE}  # 잡 실행시 잡 이름을 파라미터로 넘기기 위해 셋팅함.
     jdbc:
-      initialize-schema: ALWAYS
+      initialize-: ALWAYS # 스키마 생성을 위해 ALWAYS
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/spring_batch
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password:
   jpa:
-    show-sql: true
+    show-sql: true  # sql 확인을 위해 true 설정

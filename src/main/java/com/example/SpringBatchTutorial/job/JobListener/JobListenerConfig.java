@@ -1,7 +1,6 @@
-package com.example.SpringBatchTutorial.job.HelloWorld;
+package com.example.SpringBatchTutorial.job.JobListener;
 
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.StepContribution;
@@ -13,45 +12,46 @@ import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * desc: tasklet을 활용하여 Hello World를 출력
- * run: --job.names=helloWorldJob
+ * desc: 리스너를 활용하여 job 실행 전/후 로그 작업
+ * run: --job.name=jobListenerJob
  */
-
 @Configuration
 @RequiredArgsConstructor
-public class HelloWorldJobConfig {
-    private final JobBuilderFactory jobBuilderFactory;  // @Autowired 사용시 오류가 나서 final로 설정함...
-    private final StepBuilderFactory stepBuilderFactory; // 이유는 잘 모르겠음...
+public class JobListenerConfig {
+    private final JobBuilderFactory jobBuilderFactory;
+    private final StepBuilderFactory stepBuilderFactory;
 
-    @Bean // 빈 등록
-    public Job helloWorldJob() { // 잡 이름 생성
-        return jobBuilderFactory.get("helloWorldJob")
-                .incrementer(new RunIdIncrementer()) // 시퀀스를 순차적으 부여할수 있도록 함
-                .start(helloWorldStep())
+    @Bean
+    public Job jobListenerJob(Step jobListenerStep) {
+        return jobBuilderFactory.get("jobListenerJob")
+                .incrementer(new RunIdIncrementer())
+                .listener(new JobLoggerListener())
+                .start(jobListenerStep)
                 .build();
     }
 
     @JobScope
     @Bean
-    public Step helloWorldStep() { // 스텝 하위에는 read, process, write 가 존재함.
-        return stepBuilderFactory.get("helloWorldStep")
-                /* * 읽고 쓸게 없는 간단한 배치 작업을 하기 위해 설정함 */
-                .tasklet(helloWorldTasklet())
+    public Step jobListenerStep(Tasklet jobListenerTasklet) {
+        return stepBuilderFactory.get("jobListenerStep")
+                .tasklet(jobListenerTasklet)
                 .build();
     }
 
-    @StepScope // 스텝 하위에서 실행되기 떄문에 @StepScope 명시
+    @StepScope
     @Bean
-    public Tasklet helloWorldTasklet() {
+    public Tasklet jobListenerTasklet() {
         return new Tasklet() {
             @Override
             public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-                System.out.println("Hello World Spring Batch");
-                return RepeatStatus.FINISHED;
+//                System.out.println("Job Listener Tasklet");
+//                return RepeatStatus.FINISHED;
+                throw new Exception("Failed!!!!");
             }
         };
     }
